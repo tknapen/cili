@@ -171,7 +171,7 @@ def extract_events(samples, events, offset=0, duration=0,
         ok_idxs = [i for i in range(len(r_idxs)) if not
             any([all((r_idxs[i]<=d, e_idxs[i]>=d)) for d in disc_idxs])]
         if (len(r_idxs) - len(ok_idxs)) == 0:
-            print("excluding %d events for crossing discontinuities" %  (len(r_idxs) - len(ok_idxs)))
+            print(("excluding %d events for crossing discontinuities" %  (len(r_idxs) - len(ok_idxs))))
         # return None if there's nothing to do
         if len(ok_idxs) == 0:
             if return_count:
@@ -195,7 +195,7 @@ def extract_events(samples, events, offset=0, duration=0,
         ok_idxs = [i for i in range(len(r_idxs)) if not
             any([all((r_idxs[i]<=d, e_idxs[i]>=d)) for d in disc_idxs])]
         if (len(r_idxs) - len(ok_idxs)) == 0:
-            print("excluding %d events for crossing discontinuities" %  (len(r_idxs) - len(ok_idxs)))
+            print(("excluding %d events for crossing discontinuities" %  (len(r_idxs) - len(ok_idxs))))
         # return None if there's nothing to do
         if len(ok_idxs) == 0:
             if return_count:

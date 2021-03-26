@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 
 import os
 import sys
@@ -179,8 +179,8 @@ def pandas_df_from_txt(file_path):
     fields = [str(x) for x in list(df.dtypes.keys())]
     dtypes = dict([(d, object)
                    for d in fields if not d in list(TXT_FIELDS.keys())])
-    dtypes.update(dict([(k, v) for k, v in TXT_FIELDS.items() if k in fields]))
-    nums = [k for k, v in dtypes.items() if v not in [object]]
+    dtypes.update(dict([(k, v) for k, v in list(TXT_FIELDS.items()) if k in fields]))
+    nums = [k for k, v in list(dtypes.items()) if v not in [object]]
     ints = [k for k in nums if dtypes[k] in TXT_INT_TYPES]
     df[nums] = df[nums].apply(pd.to_numeric, errors='coerce')
     df[ints] = df[ints].astype(np.int64)
@@ -244,7 +244,7 @@ def pandas_df_from_lines(csv_lines, dtypes, ignore):
     import pandas as pd
     try:
         # python 2
-        from cStringIO import StringIO
+        from io import StringIO
     except ImportError:
         # python 3+
         from io import StringIO

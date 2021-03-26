@@ -1,6 +1,5 @@
 import pandas as pd
 import pandas.io.pytables as pt
-from pandas.compat import u_safe as u, string_types, isidentifier
 
 
 class SaveMixin(object):
@@ -121,7 +120,7 @@ class Events(object):
     def _local_dir(self):
         """ add the string-like attributes from the info_axis """
         return [c for c in list(self.dframes.keys())
-                if isinstance(c, string_types) and isidentifier(c)]
+                if isinstance(c, str) and c.isidentifier()]
 
     def __dir__(self):
         """
@@ -145,5 +144,5 @@ class Events(object):
 
 
 def initialize_hdf5():
-    pt._TYPE_MAP.update({Events: u('wide'), Samples: u('frame'), })
+    pt._TYPE_MAP.update({Events: 'wide', Samples: 'frame', })
     pt._AXES_MAP.update({Events: [1, 2], Samples: [0], })

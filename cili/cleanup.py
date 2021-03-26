@@ -187,7 +187,7 @@ def interp_eyelink_blinks(samples, events, find_recovery=True, interp_fields=["p
         samples, events, mask_fields=interp_fields, find_recovery=find_recovery)
     # inplace=True causes a crash, so for now...
     # fixed by #6284 ; will be in 0.14 release of pandas
-    samps = samps.interpolate(method="linear", axis=0, inplace=False)
+    samps = samps.interpolate(method="linear", axis=0, inplace=True)
     return samps
 
 
@@ -203,7 +203,7 @@ def ev_row_idxs(samples, events):
     """
     import numpy as np
     idxs = []
-    for idx, dur in events.duration.items():
+    for idx, dur in list(events.duration.items()):
         idxs.extend(list(range(idx, int(idx + dur))))
     idxs = np.unique(idxs)
     idxs = np.intersect1d(idxs, samples.index.tolist())
@@ -245,14 +245,13 @@ def adjust_eyelink_recov_idxs(samples, events, z_thresh=.1, window=1000, kernel_
     # use pandas to take rolling mean. pandas' kernel looks backwards, so we need to pull a reverse...
     dfs = np.gradient(samples[field].values)
     reversed_dfs = dfs[::-1]
-    reversed_dfs_ravg = np.array(pd.rolling_mean(
-        pd.Series(reversed_dfs), window=kernel_size, min_periods=1))
+    reversed_dfs_ravg = np.array(pd.Series(reversed_dfs).rolling(window=kernel_size).mean())
     dfs_ravg = reversed_dfs_ravg[::-1]
     dfs_ravg = np.abs((dfs_ravg - np.mean(dfs_ravg)) / np.std(dfs_ravg))
     samp_count = len(samples)
     # search for drop beneath z_thresh after end index
     new_durs = []
-    for idx, dur in events.duration.items():
+    for idx, dur in list(events.duration.items()):
         try:
             s_pos = samples.index.get_loc(idx + dur) - 1
             e_pos = samples.index[min(s_pos + window, samp_count - 1)]
