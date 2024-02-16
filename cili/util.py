@@ -258,9 +258,9 @@ def pandas_df_from_lines(csv_lines, dtypes, ignore):
                      na_values=["."],
                      names=fields,
                      header=None,
-                     error_bad_lines=False,
-                     # usecols=use_names,
-                     warn_bad_lines=False,)
+                     on_bad_lines='skip',
+                     # usecols=use_names
+                     )
     nums = [d[0] for d in dtypes if d[1] not in [
         object] and d[0] not in ['onset']]
     ints = [d[0]
